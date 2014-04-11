@@ -322,7 +322,7 @@ def get_promise(request):
     user = request.user.account
     promise_summ = user.promise_summ if user.promise_summ not in [None, 0, ''] else settings.MAX_PROMISE_SUM
     promise_min_ballance = user.promise_min_ballance if user.promise_min_ballance not in [None, 0, ''] else settings.MIN_BALLANCE_FOR_PROMISE
-    allow_transfer_summ= "%.2f" % (0 if user.ballance<=0 else user.ballance)
+    allow_transfer_summ= "%.2f" % (0 if user.ballance<=0 or Transaction.objects.filter(account=user, type=TransactionType.objects.get(internal_name='PROMISE_PAYMENT'), promise_expired=False).count() >= 1 else user.ballance)
     LEFT_PROMISE_DATE = datetime.datetime.now()+datetime.timedelta(days = user.promise_days or settings.LEFT_PROMISE_DAYS)
     if settings.ALLOW_PROMISE==True and Transaction.objects.filter(account=user, type=TransactionType.objects.get(internal_name='PROMISE_PAYMENT'), promise_expired=False).count() >= 1:
         last_promises = Transaction.objects.filter(account=user,  type=TransactionType.objects.get(internal_name='PROMISE_PAYMENT')).order_by('-created')[0:10]
