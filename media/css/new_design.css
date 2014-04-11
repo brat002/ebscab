@@ -1,5 +1,4 @@
 
-
 .clear {
 	clear:both;
 }
@@ -581,9 +580,9 @@ a.helpdesk-img:hover, a.helpdesk-img-active {
 
 .statistics_link a.open, .open {
 	background:url('../img/open.gif') no-repeat;
-	width:12px;
-	height:13px;
-	margin-right:16px;
+	width:13px;
+	height:12px;
+	margin-right:14px;
 	float:right;
 	padding:0;
 }
