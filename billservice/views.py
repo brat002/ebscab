@@ -504,10 +504,10 @@ def transaction(request):
     summ_on_page = 0
     transactions = paginator.get_page_items()
     if is_range:
-        for trnsaction in qs:
-            summ += trnsaction.summ
-        for transactio in transactions:
-            summ_on_page += trnsaction.summ
+        for transaction in qs:
+            summ += transaction.summ
+        for transaction in transactions:
+            summ_on_page += transaction.summ
     summ = summ
     summ_on_page = summ_on_page
     rec_count = len(transactions)+1
