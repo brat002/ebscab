@@ -1003,6 +1003,7 @@ def traffic_limit(request):
 @login_required
 def statistics(request):
     user = request.user.account
+    last_promises = Transaction.objects.filter(account=user, type=TransactionType.objects.get(internal_name='PROMISE_PAYMENT')).order_by('-created')[0:8]
     transaction = Transaction.objects.filter(account=user).order_by('-created')[:8]
     active_session = ActiveSession.objects.filter(account=user).order_by('-date_start')[:8]
     periodical_service_history = PeriodicalServiceHistory.objects.filter(account=user).order_by('-created')[:8]
@@ -1028,6 +1029,7 @@ def statistics(request):
     return {
             #'net_flow_stream':net_flow_streams,
             'transactions':transaction,
+            'last_promises':last_promises,
             'active_session':active_session,
             #'services':services,
             'periodical_service_history':periodical_service_history,
