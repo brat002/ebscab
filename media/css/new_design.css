@@ -1,4 +1,3 @@
-
 .clear {
 	clear:both;
 }
@@ -582,7 +581,7 @@ a.helpdesk-img:hover, a.helpdesk-img-active {
 	background:url('../img/open.gif') no-repeat;
 	width:13px;
 	height:12px;
-	margin-right:14px;
+	margin-right:10px;
 	float:right;
 	padding:0;
 }
@@ -600,7 +599,7 @@ a.helpdesk-img:hover, a.helpdesk-img-active {
 	background:url('../img/more.gif') no-repeat;
 	width:13px;
 	height:12px;
-	margin-right:14px;
+	margin-right:10px;
 	float:right;
 	padding:0;
 	
