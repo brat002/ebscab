@@ -342,7 +342,7 @@ def get_promise(request):
     user = request.user.account
     promise_summ = user.promise_summ if user.promise_summ not in [None, 0, ''] else settings.MAX_PROMISE_SUM
     promise_min_ballance = user.promise_min_ballance if user.promise_min_ballance not in [None, 0, ''] else settings.MIN_BALLANCE_FOR_PROMISE
-    allow_transfer_summ= "%.2f" % (0 if user.ballance<=0 else user.ballance)
+    allow_transfer_summ= "%.2f" % (0 if user.ballance<=0 or Transaction.objects.filter(account=user, type=TransactionType.objects.get(internal_name='PROMISE_PAYMENT'), promise_expired=False).count() >= 1 else user.ballance)
     LEFT_PROMISE_DATE = datetime.datetime.now()+datetime.timedelta(days = user.promise_days or settings.LEFT_PROMISE_DAYS)
     if settings.ALLOW_PROMISE==True and Transaction.objects.filter(account=user, type=TransactionType.objects.get(internal_name='PROMISE_PAYMENT'), promise_expired=False).count() >= 1:
         last_promises = Transaction.objects.filter(account=user,  type=TransactionType.objects.get(internal_name='PROMISE_PAYMENT')).order_by('-created')[0:10]
@@ -533,10 +533,10 @@ def transaction(request):
     summ_on_page = 0
     transactions = paginator.get_page_items()
     if is_range:
-        for trnsaction in qs:
-            summ += trnsaction.summ
-        for transactio in transactions:
-            summ_on_page += trnsaction.summ
+        for transaction in qs:
+            summ += transaction.summ
+        for transaction in transactions:
+            summ_on_page += transaction.summ
     summ = summ
     summ_on_page = summ_on_page
     rec_count = len(transactions)+1
@@ -1032,6 +1032,7 @@ def traffic_limit(request):
 @login_required
 def statistics(request):
     user = request.user.account
+    last_promises = Transaction.objects.filter(account=user, type=TransactionType.objects.get(internal_name='PROMISE_PAYMENT')).order_by('-created')[0:8]
     transaction = Transaction.objects.filter(account=user).order_by('-created')[:8]
     active_session = ActiveSession.objects.filter(account=user).order_by('-date_start')[:8]
     periodical_service_history = PeriodicalServiceHistory.objects.filter(account=user).order_by('-created')[:8]
@@ -1057,6 +1058,7 @@ def statistics(request):
     return {
             #'net_flow_stream':net_flow_streams,
             'transactions':transaction,
+            'last_promises':last_promises,
             'active_session':active_session,
             #'services':services,
             'periodical_service_history':periodical_service_history,

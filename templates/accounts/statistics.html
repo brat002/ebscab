@@ -162,7 +162,44 @@
 			</td>
 		</tr>
 		{% endif %}
-        
+        	
+        	{% if last_promises %}
+                <tr>
+                        <th class="white bold s-11 blue_caption">
+                                <div class="f-right statistics_link white">
+                                        <a id="promises_data_a" class="close" href="javascript:return 0;" onclick="runEffect('promises_data')">&nbsp;</a>
+                                </div>
+                                <div class="f-left statistics_title">{% blocktrans %}ИСТОРИЯ ОБЕЩАННЫХ ПЛАТЕЖЕЙ{% endblocktrans %}</div>
+                        </th>
+                </tr>
+                <tr>
+                        <td id="promises_data">
+                                <table class="wide extra_table" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                                <th>{% blocktrans %}Дата{% endblocktrans %}</th>
+                                                <th>{% blocktrans %}Сумма{% endblocktrans %}</th>
+                                                <th>{% blocktrans %}Взят до{% endblocktrans %}</th>
+                                                <th>{% blocktrans %}Списан со счёта{% endblocktrans %}</th>
+                                                <th>{% blocktrans %}Комментарий{% endblocktrans %}</th>
+                                        </tr>
+                                        {% for promise in last_promises %}
+                                        <tr>
+                                                <td class="{{ forloop.counter|coll_bg  }} {% if forloop.last %}no_border{% endif %}">{{ promise.created|date:"d.m.Y H:i" }}&nbsp;</td>
+                                                <td class="left_border {{ forloop.counter|coll_bg  }} {% if forloop.last %}no_border{% endif %}">{{ promise.human_sum|floatformat:2 }}&nbsp;{{ CURRENCY }}</td>
+                                                <td class="left_border {{ forloop.counter|coll_bg  }} {% if forloop.last %}no_border{% endif %}">{{ promise.end_promise|date:"d.m.Y H:i" }}&nbsp;</td>
+                                                <td class="left_border {{ forloop.counter|coll_bg  }} {% if forloop.last %}no_border{% endif %}">{% if promise.promise_expired %}Да{% else %} Нет{% endif %}&nbsp;</td>
+                                                <td class="left_border {{ forloop.counter|coll_bg  }} {% if forloop.last %}no_border{% endif %}">{{ promise.description }}&nbsp;</td>
+                                        </tr>
+                                        {% endfor %}
+                                        <tr>
+                                                <td colspan="7" class="no_border">&nbsp;</td>
+                                        </tr>
+                                </table>
+
+                        </td>
+                </tr>
+                {% endif %}
+
 		{% if active_session %}
 		<tr>
 			<th class="white bold s-11 blue_caption">
